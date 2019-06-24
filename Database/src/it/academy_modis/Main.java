@@ -40,7 +40,7 @@ public class Main {
 			case 4:
 				System.out.print("Inserisci il nome del dipartimento "
 						+ "di cui vuoi sapere il responsabile: ");
-				String dipartimento = scanner.nextLine();
+				String dipartimento = scanner.nextLine().toUpperCase();
 				db.getResponsabile(dipartimento);
 				break;
 			case 0:
