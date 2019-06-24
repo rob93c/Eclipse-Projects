@@ -26,14 +26,17 @@ public class Main {
 			
 			switch(choice) {
 			case 1:
+				System.out.println("Impiegati in ordine decrescente di salario:");
 				listaImpiegati = db.getImpiegatiBySalDesc();
 				db.printLista(listaImpiegati);
 				break;
 			case 2:
+				System.out.println("Impiegati con il diploma");
 				listaImpiegati = db.getAllImpiegatiDiplomati();
 				db.printLista(listaImpiegati);
 				break;
 			case 3:
+				System.out.println("Impiegati con la laurea:");
 				listaImpiegati = db.getAllImpiegatiLaureati();
 				db.printLista(listaImpiegati);
 				break;

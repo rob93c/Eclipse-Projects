@@ -1,29 +1,48 @@
 package it.academy_modis;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import oracle.jdbc.pool.OracleDataSource;
 
 public class DatabaseManager {
 	
 	private Connection connection;
-//	private ArrayList<Impiegati> listaImpiegati;
+	private static final String DB_PROPERTIES = "db.properties";
 	
 	// dati necessari a collegarsi al DB
 	public DatabaseManager() {
 
 		OracleDataSource dataSource;
 		try {
+			
+			Properties properties = new Properties();
+			File dbFileProperties = new File(DB_PROPERTIES);
+			InputStream is = new FileInputStream(dbFileProperties);
+			
+			properties.load(is);
+			
 			dataSource = new OracleDataSource();
-			// jdbc:sqlite
-			dataSource.setURL("jdbc:oracle:thin:@localhost:1521/xe");
-			dataSource.setDatabaseName("XE");
-			dataSource.setUser("SYSTEM");
-			dataSource.setPassword("password");
+			
+			String dbhost = properties.getProperty("dbhost");
+			String dbname = properties.getProperty("dbname");
+			String dbuser = properties.getProperty("dbuser");
+			String dbpass = properties.getProperty("dbpass");
+			
+			// jdbc:oracle
+			dataSource.setURL(dbhost);
+			dataSource.setDatabaseName(dbname);
+			dataSource.setUser(dbuser);
+			dataSource.setPassword(dbpass);
 			
 			this.connection = dataSource.getConnection();
 			
@@ -31,6 +50,10 @@ public class DatabaseManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Connessione non funzionante.");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	
 	}
