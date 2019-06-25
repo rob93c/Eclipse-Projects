@@ -74,7 +74,7 @@ public class DatabaseManager {
 						"on i.id_impiegato = s.id_impiegato\r\n" + 
 						"order by s.NR_QTA_SALARIO desc";
 		
-		PreparedStatement stm;
+		PreparedStatement stm = null;
 		
 		try {
 			stm = this.connection.prepareStatement(query);
@@ -91,6 +91,13 @@ public class DatabaseManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				stm.close();
+				this.connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return listaImpiegati;
@@ -171,5 +178,140 @@ public class DatabaseManager {
 		
 	}
 	
+	public int insertDipartimento(String descrizione) {
+		
+		int nuovoIndice = 0;
+		
+		String query = "insert into sys.dipartimenti\r\n" + 
+						"values ((select max(to_number(id_dipartimento)) "
+						+ "from sys.dipartimenti) + 1, ?)";
+
+		PreparedStatement stm;
+		try {
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1, descrizione);
+			
+			stm.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return nuovoIndice;
+	}
+	
+	public void addImpiegatoToDipartimento(String id_dip, String id_imp) {
+		
+		try {
+			String query = "insert into sys.impiegati_dipartimenti\r\n" + 
+					"values ('" + id_dip + "', '" + id_imp + "', sysdate, null)";
+			
+			// 2. Creazione dello Statement sulla connessione attiva
+			PreparedStatement stm = connection.prepareStatement(query);
+			
+			stm.executeUpdate();
+			
+			ResultSet rs = stm.getGeneratedKeys();
+			
+			while(rs.next()) {
+				System.out.println("\nIl dipendente è stato aggiunto al dipartimento con successo.\n");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void deleteImpiegatoFromDipartimento(String id_dip, String id_imp) {
+		
+		try {
+			String query = "delete from sys.impiegati_dipartimenti\r\n" + 
+							"where id_dipartimento = '" + id_dip + "', "
+							+ "and id_impiegato = '" + id_imp + "')";
+			
+			PreparedStatement stm = connection.prepareStatement(query);
+			
+			stm.executeUpdate();
+			
+			System.out.println("\nIl dipendente è stato elimminato dal dipartimento con successo.\n");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public String isImpiegato(String cognome) {
+		
+		String ide = null;
+		String query = "select id_impiegato\r\n" + 
+						"from sys.impiegati\r\n" + 
+						"where ds_cognome = ?";
+		
+		PreparedStatement stm;
+		try {
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1, cognome);
+			
+			ResultSet rs = stm.executeQuery();
+			
+			while(rs.next()) {
+				ide = rs.getString("id_impiegato");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ide;
+	}
+	
+	public String isDipartimento(String descrizione) {
+		
+		String ds = null;
+		String query = "select id_dipartimento\r\n" + 
+						"from sys.dipartimenti\r\n" + 
+						"where ds_dipartimento = ?";
+		
+		PreparedStatement stm;
+		try {
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1, descrizione);
+			
+			ResultSet rs = stm.executeQuery();
+			
+			while(rs.next()) {
+				ds = rs.getString("id_dipartimento");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ds;
+	}
+	
+	public void updateSalario(int salario, String id) {
+		
+		try {
+			String query = "update sys.salari s\r\n" + 
+							"set s.NR_QTA_SALARIO = " + salario + "\r\n" + 
+							"where s.id_impiegato = '" + id + "'";
+			
+			PreparedStatement stm = connection.prepareStatement(query);
+			
+			stm.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void closeConnection() {
+		
+		try {
+			this.connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
 	
