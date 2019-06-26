@@ -56,9 +56,15 @@ public class DatabaseManager {
 		}
 	}
 	
-	public void printLista(ArrayList<Utente> listaUtenti) {
+	public void printListaUtenti(ArrayList<Utente> listaUtenti) {
 		for(Utente u: listaUtenti) {
 			System.out.println(u.getNickname() + " | " + u.getName() + " " + u.getSurname());
+		}
+	}
+	
+	public void printListaEventi(ArrayList<Evento> listaEventi) {
+		for(Evento e: listaEventi) {
+			System.out.println("L'evento " + e.getNome() + " si terrà a " + e.getLuogo());
 		}
 	}
 	
@@ -86,6 +92,120 @@ public class DatabaseManager {
 			e.printStackTrace();
 		}
 		return nuovoIndice;
+	}
+	
+	public int insertEvento(int id_categoria, String nome, String luogo, String provincia, String data) {
+		// TODO controllare i nomi dei parametri
+		int num = 0;
+		
+		String query = "insert into sys.evento"
+				+ "values ((select max(id_evento)"
+				+ "from sys.evento) + 1, ?, ?, ?, ?, to_date('" + data + "'), 'DD/MM/YYYY')";
+		
+		PreparedStatement stm;
+		try { 
+			stm = this.connection.prepareStatement(query);
+			stm.setInt(1, id_categoria);
+			stm.setString(2, nome);
+			stm.setString(3, luogo);	
+			stm.setString(4, provincia);
+			
+			stm.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return num;
+	}
+	
+	public int insertCommento(String testo, int voto, int id_utente, int id_evento) {
+		
+		int num = 0;
+		
+		String query = "insert into sys.commento" // TODO controllare nome tabella
+				+ "values ((select max(id_commento)"
+				+ "from sys.commento) + 1, ?, ?, ?, ?";
+		
+		PreparedStatement stm;
+		try {
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1, testo);
+			stm.setInt(2, voto);
+			stm.setInt(3, id_utente);
+			stm.setInt(4, id_evento);
+			
+			stm.executeUpdate();
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return num;
+	}
+	
+	public int getIDUtente(String nickname, String password) {
+		
+		int id_utente = 0;
+		
+		String query = "select id_utente"
+				+ "from sys.utente"
+				+ "where nickname = ?"
+				+ "and password = ?";
+		
+		PreparedStatement stm;
+		try {
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1, nickname);
+			stm.setString(2, password);
+			
+			ResultSet rs = stm.executeQuery();
+			
+			while(rs.next()) {
+				id_utente = rs.getInt("id_utente");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return id_utente;
+	}
+	
+	public ArrayList<Evento> getEventiOrdinati(){
+		
+		ArrayList<Evento> listaEventi = new ArrayList<Evento>();
+		
+		String query = "select *"
+				+ "from sys.evento"
+				+ "order by data";
+		
+		PreparedStatement stm = null;
+		
+		try {
+			stm = this.connection.prepareStatement(query);
+			
+			ResultSet rs = stm.executeQuery();
+			
+			while(rs.next()) {
+				listaEventi.add(
+						new Evento(
+								rs.getInt("id_categoria"),
+								rs.getString("nome"),
+								rs.getString("luogo"),
+								rs.getString("provincia"),
+								rs.getString("data")
+								)
+						);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				stm.close();
+				this.connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return listaEventi;
 	}
 	
 	public ArrayList<Utente> getAllUtenti() {

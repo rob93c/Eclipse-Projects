@@ -13,6 +13,7 @@ public class Main {
 		DatabaseManager db = new DatabaseManager();
 		
 		ArrayList<Utente> listaUtenti = new ArrayList<Utente>();
+		ArrayList<Evento> listaEventi = new ArrayList<Evento>();
 		
 		while(cicla) {
 			System.out.println("\nScegli un'opzione:" + 
@@ -39,19 +40,61 @@ public class Main {
 				System.out.print("Inserisci la password: ");
 				String password = scanner.nextLine();
 				db.insertUtente(nickname, name, surname, mail, password);
-				System.out.println("\nL'utente " + nickname + " � stato registrato con successo.\n");
+				System.out.println("\nL'utente " + nickname + " è stato registrato con successo.\n");
 				break;
 			case 2:
 				listaUtenti = db.getAllUtenti();
-				db.printLista(listaUtenti);
+				db.printListaUtenti(listaUtenti);
 				break;
 			case 3:
 				System.out.print("Inserisci il nickname: ");
 				nickname = scanner.nextLine();
 				System.out.print("Inserisci la password: ");
 				password = scanner.nextLine();
-//				System.out.println(db.login(nickname, password));
-				
+				if(db.login(nickname, password)) {
+					System.out.println("Scegli una categoria: " // TODO controllare categorie
+							+ "\n1) Concerto"
+							+ "\n2) Balletto"
+							+ "\n3) Rappresentazione teatrale"
+							+ "\n4) Proiezione"
+							+ "\n5) Conferenza");
+					int id_categoria = scanner.nextInt();
+					System.out.print("Inserisci il nome dell'evento: ");
+					String nomeEvento = scanner.nextLine();
+					System.out.print("Inserisci il luogo dell'evento: ");
+					String luogo = scanner.nextLine();
+					System.out.print("Inserisci la provincia dell'evento: ");
+					String provincia = scanner.nextLine();
+					System.out.print("Inserisci la data dell'evento (nel formato DD/MM/YYYY): ");
+					String data = scanner.nextLine();
+					db.insertEvento(id_categoria, nomeEvento, luogo, provincia, data);
+					System.out.println("L'evento " + nomeEvento + " è stato inserito con successo.");
+				}
+				break;
+			case 4:
+				System.out.print("Inserisci il nickname: ");
+				nickname = scanner.nextLine();
+				System.out.print("Inserisci la password: ");
+				password = scanner.nextLine();
+				if(db.login(nickname, password)) {
+					System.out.println("Inserisci il corpo della recensione: ");
+					String testo = scanner.nextLine();
+					System.out.print("Inserisci la valutazione (da 1 a 5): ");
+					int voto = scanner.nextInt();
+					System.out.print("Inserisci l'ID dell'evento da recensire: ");
+					int id_evento = scanner.nextInt();
+					int id_utente = db.getIDUtente(nickname, password);
+					db.insertCommento(testo, voto, id_utente, id_evento);
+					System.out.println("Recensione inserita con successo.");
+				}
+				break;
+			case 5:
+				System.out.println("Eventi ordinati per data:");
+				listaEventi = db.getEventiOrdinati();
+				db.printListaEventi(listaEventi);
+				break;
+			case 6:
+				// TODO trovare voti e commenti relativi ad un evento
 				break;
 			case 0:
 				db.closeConnection();
