@@ -14,6 +14,7 @@ public class Main {
 		
 		ArrayList<Utente> listaUtenti = new ArrayList<Utente>();
 		ArrayList<Evento> listaEventi = new ArrayList<Evento>();
+		ArrayList<Categoria> listaCategorie = new ArrayList<Categoria>();
 		
 		while(cicla) {
 			System.out.println("\nScegli un'opzione:" + 
@@ -40,7 +41,7 @@ public class Main {
 				System.out.print("Inserisci la password: ");
 				String password = scanner.nextLine();
 				db.insertUtente(nickname, name, surname, mail, password);
-				System.out.println("\nL'utente " + nickname + " Ã¨ stato registrato con successo.\n");
+				System.out.println("\nL'utente " + nickname + " è	 stato registrato con successo.\n");
 				break;
 			case 2:
 				listaUtenti = db.getAllUtenti();
@@ -52,13 +53,12 @@ public class Main {
 				System.out.print("Inserisci la password: ");
 				password = scanner.nextLine();
 				if(db.login(nickname, password)) {
-					System.out.println("Scegli una categoria: " // TODO controllare categorie
-							+ "\n1) Concerto"
-							+ "\n2) Balletto"
-							+ "\n3) Rappresentazione teatrale"
-							+ "\n4) Proiezione"
-							+ "\n5) Conferenza");
+					System.out.println("\n | LOGIN EFFETTUATO |\n");
+					System.out.println("Scegli la categoria dell'evento da aggiungere:");
+					listaCategorie = db.getCategorie();
+					db.printListaCategorie(listaCategorie);
 					int id_categoria = scanner.nextInt();
+					scanner.nextLine();
 					System.out.print("Inserisci il nome dell'evento: ");
 					String nomeEvento = scanner.nextLine();
 					System.out.print("Inserisci il luogo dell'evento: ");
@@ -68,7 +68,7 @@ public class Main {
 					System.out.print("Inserisci la data dell'evento (nel formato DD/MM/YYYY): ");
 					String data = scanner.nextLine();
 					db.insertEvento(id_categoria, nomeEvento, luogo, provincia, data);
-					System.out.println("L'evento " + nomeEvento + " Ã¨ stato inserito con successo.");
+					System.out.println("L'evento " + nomeEvento + " è stato inserito con successo.");
 				}
 				break;
 			case 4:
@@ -77,6 +77,7 @@ public class Main {
 				System.out.print("Inserisci la password: ");
 				password = scanner.nextLine();
 				if(db.login(nickname, password)) {
+					System.out.println("\n | LOGIN EFFETTUATO |\n");
 					System.out.println("Inserisci il corpo della recensione: ");
 					String testo = scanner.nextLine();
 					System.out.print("Inserisci la valutazione (da 1 a 5): ");
@@ -94,7 +95,14 @@ public class Main {
 				db.printListaEventi(listaEventi);
 				break;
 			case 6:
-				// TODO trovare voti e commenti relativi ad un evento
+				listaEventi = db.getEventiOrdinati();
+				System.out.println("Inserisci l'ID dell'evento di cui vuoi vedere le recensioni: ");
+				for(int i = 0; i < listaEventi.size(); i++) {
+					System.out.println((i+1) + ") " + listaEventi.get(i));
+				}
+				int id_evento = scanner.nextInt();
+				scanner.nextLine();
+				db.getRecensione(id_evento);
 				break;
 			case 0:
 				db.closeConnection();

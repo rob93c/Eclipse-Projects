@@ -64,7 +64,20 @@ public class DatabaseManager {
 	
 	public void printListaEventi(ArrayList<Evento> listaEventi) {
 		for(Evento e: listaEventi) {
-			System.out.println("L'evento " + e.getNome() + " si terr√† a " + e.getLuogo());
+			String[] data = e.getData().split(" ");
+			String[] formatted = data[0].split("-");
+			String prettyData = formatted[2] + "/" + formatted[1] + "/" + formatted[0];
+			
+			System.out.println("L'evento " + e.getNome() + " si terr‡†a " + e.getLuogo() + 
+					" il " +prettyData);
+		}
+	}
+	
+	public void printListaCategorie(ArrayList<Categoria> listaCategorie) {
+		int i = 1;
+		for(Categoria c: listaCategorie) {
+			System.out.println(i + ") " + c.getNome());
+			i++;
 		}
 	}
 	
@@ -98,9 +111,9 @@ public class DatabaseManager {
 		// TODO controllare i nomi dei parametri
 		int num = 0;
 		
-		String query = "insert into sys.evento"
-				+ "values ((select max(id_evento)"
-				+ "from sys.evento) + 1, ?, ?, ?, ?, to_date('" + data + "'), 'DD/MM/YYYY')";
+		String query = "insert into sys.evento "
+				+ "values ((select max(id_evento) "
+				+ "from sys.evento) + 1, ?, ?, ?, ?, to_date(?, 'DD/MM/YYYY'))";
 		
 		PreparedStatement stm;
 		try { 
@@ -109,6 +122,7 @@ public class DatabaseManager {
 			stm.setString(2, nome);
 			stm.setString(3, luogo);	
 			stm.setString(4, provincia);
+			stm.setString(5, data);
 			
 			stm.executeUpdate();
 			
@@ -122,9 +136,9 @@ public class DatabaseManager {
 		
 		int num = 0;
 		
-		String query = "insert into sys.commento" // TODO controllare nome tabella
-				+ "values ((select max(id_commento)"
-				+ "from sys.commento) + 1, ?, ?, ?, ?";
+		String query = "insert into sys.commenti "
+				+ "values ((select max(id_commento) "
+				+ "from sys.commenti) + 1, ?, ?, ?, ?)";
 		
 		PreparedStatement stm;
 		try {
@@ -146,9 +160,9 @@ public class DatabaseManager {
 		
 		int id_utente = 0;
 		
-		String query = "select id_utente"
-				+ "from sys.utente"
-				+ "where nickname = ?"
+		String query = "select id_utente "
+				+ "from sys.utente "
+				+ "where nickname = ? "
 				+ "and password = ?";
 		
 		PreparedStatement stm;
@@ -169,12 +183,81 @@ public class DatabaseManager {
 		return id_utente;
 	}
 	
-	public ArrayList<Evento> getEventiOrdinati(){
+	public void getRecensione(int id_evento) {
+		
+		String query = "select testo, voto, id_utente\r\n" + 
+						"from sys.commenti\r\n" + 
+						"where id_evento = ?";
+		
+		PreparedStatement stm;
+		try {
+			stm = this.connection.prepareStatement(query);
+			stm.setInt(1, id_evento);
+			ResultSet rs = stm.executeQuery();
+			
+			while(rs.next()) {
+				String nick = getNickUtente(rs.getInt("id_utente"));
+				System.out.println("Post dell'utente " + nick 
+				+ "\nRecensione: " + rs.getString("testo") + "\nVoto: " + rs.getInt("voto"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private String getNickUtente(int id_utente) {
+		
+		String nick = "";
+		
+		String query = "select u.nickname\r\n" + 
+						"from sys.utente u\r\n" + 
+						"inner join sys.commenti c\r\n" + 
+						"on u.id_utente = ?";
+		
+		PreparedStatement stm;
+		try {
+			stm = this.connection.prepareStatement(query);
+			stm.setInt(1, id_utente);
+			ResultSet rs = stm.executeQuery();
+			
+			while(rs.next()) {
+				nick = rs.getString("nickname");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return nick;
+	}
+	
+	public ArrayList<Categoria> getCategorie() {
+		
+		ArrayList<Categoria> listaCategorie = new ArrayList<Categoria>();
+		
+		String query = "select *"
+					+ "from sys.categoria";
+		PreparedStatement stm;
+		try {
+			stm = this.connection.prepareStatement(query);
+			
+			ResultSet rs = stm.executeQuery();
+			
+			while(rs.next()) {
+				listaCategorie.add(
+						new Categoria(rs.getString("nome"))
+						);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listaCategorie;
+	}
+	
+	public ArrayList<Evento> getEventiOrdinati() {
 		
 		ArrayList<Evento> listaEventi = new ArrayList<Evento>();
 		
-		String query = "select *"
-				+ "from sys.evento"
+		String query = "select * "
+				+ "from sys.evento "
 				+ "order by data";
 		
 		PreparedStatement stm = null;
@@ -197,13 +280,6 @@ public class DatabaseManager {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				stm.close();
-				this.connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		return listaEventi;
 	}
@@ -237,15 +313,7 @@ public class DatabaseManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				stm.close();
-				this.connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
+		} 
 		return listaUtenti;
 		
 	}

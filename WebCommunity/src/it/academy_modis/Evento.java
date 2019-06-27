@@ -36,6 +36,14 @@ public class Evento {
 	public String getData() {
 		return data;
 	}
+
+	@Override
+	public String toString() {
+		String[] dataArr = data.split(" ");
+		String[] formatted = dataArr[0].split("-");
+		String prettyData = formatted[2] + "/" + formatted[1] + "/" + formatted[0];
+		return "L'evento " + nome + " si terrà a " + luogo + " in data " + prettyData;
+	}
 	
 	
 }
