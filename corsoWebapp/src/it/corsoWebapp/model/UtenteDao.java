@@ -2,10 +2,12 @@ package it.corsoWebapp.model;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import it.corsoWebapp.servlet.ServiceLoaderServlet;
+import it.corsoWebapp.servlet.UtenteServlet;
 
 public class UtenteDao {
 	
@@ -24,12 +26,39 @@ public class UtenteDao {
 			ResultSet rs = stm.executeQuery();
 			
 			while(rs.next()) {
-				listaUtenti.add(new UtenteVo(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)));
+				listaUtenti.add(new UtenteVo(rs.getInt(1), rs.getString(2), 
+						rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 		return listaUtenti;
+	}
+	
+	public UtenteVo getUtenteByPK(int id) {
+		
+		ServiceLoaderServlet sls = new ServiceLoaderServlet();
+		
+		String query = "select * "
+					+ "from sys.utente "
+					+ "where id_utente = ?";
+		
+		UtenteVo utente = null;
+		PreparedStatement stm;
+		try {
+			stm = sls.startConnection().prepareStatement(query);
+			stm.setInt(1, id);
+			
+			ResultSet rs = stm.executeQuery();
+			
+			if(rs.next()) {
+				utente = new UtenteVo(rs.getInt(1), rs.getString(2), rs.getString(3), 
+						rs.getString(4), rs.getString(5), rs.getString(6));
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return utente;
 	}
 }
