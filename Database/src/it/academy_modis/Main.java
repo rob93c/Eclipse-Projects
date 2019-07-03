@@ -3,6 +3,8 @@ package it.academy_modis;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import it.academy_modis.model.Impiegato;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -12,7 +14,7 @@ public class Main {
 		
 		DatabaseManager db = new DatabaseManager();
 		
-		ArrayList<Impiegati> listaImpiegati = new ArrayList<Impiegati>();
+		ArrayList<Impiegato> listaImpiegati = new ArrayList<Impiegato>();
 		
 		while(cicla) {
 			System.out.println("\nScegli un'opzione:" + 

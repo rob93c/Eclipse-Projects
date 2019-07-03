@@ -15,7 +15,7 @@ public class EsempioDatabase {
 		
 		DatabaseManager db = new DatabaseManager(connectionString);
 		
-		ArrayList<Cliente> listaClienti;
+//		ArrayList<Cliente> listaClienti;
 //		try {
 //			listaClienti = db.getAllClienti();
 //			for(Cliente c: listaClienti) {

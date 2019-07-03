@@ -32,7 +32,7 @@ public class Evento {
 	public String getProvincia() {
 		return provincia;
 	}
-
+	
 	public String getData() {
 		return data;
 	}

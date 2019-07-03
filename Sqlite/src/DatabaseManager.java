@@ -90,7 +90,7 @@ public class DatabaseManager {
 	
 	public ArrayList<Cliente> getAllClientiByNomeOCognome(String s) {
 		
-ArrayList<Cliente> listaClienti = new ArrayList<Cliente>();
+		ArrayList<Cliente> listaClienti = new ArrayList<Cliente>();
 		
 		// 1. Connessione
 		try {
@@ -176,12 +176,12 @@ ArrayList<Cliente> listaClienti = new ArrayList<Cliente>();
 			try {
 				Connection connection = DriverManager.getConnection(connectionString);
 				
-				String query = "update cliente set nome = ?, "
-						+ "cognome = ?, "
-						+ "cap = ?, "
-						+ "telefono = ?,"
-						+ " premium = ?" + 
-						"where id = ?;";
+				String query =    "update cliente set nome = ?, "
+								+ "cognome = ?, "
+								+ "cap = ?, "
+								+ "telefono = ?, "
+								+ "premium = ?" + 
+								  "where id = ?;";
 				
 				// 2. Creazione dello Statement sulla connessione attiva
 				PreparedStatement stm = connection.prepareStatement(query);

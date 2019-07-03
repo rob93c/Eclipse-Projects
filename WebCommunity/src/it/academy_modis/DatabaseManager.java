@@ -68,8 +68,8 @@ public class DatabaseManager {
 			String[] formatted = data[0].split("-");
 			String prettyData = formatted[2] + "/" + formatted[1] + "/" + formatted[0];
 			
-			System.out.println("L'evento " + e.getNome() + " si terrà a " + e.getLuogo() + 
-					" il " +prettyData);
+			System.out.println("L'evento " + e.getNome() + " si terr�a " + e.getLuogo() + 
+					" il " + prettyData);
 		}
 	}
 	
@@ -340,6 +340,7 @@ public class DatabaseManager {
 			stm = this.connection.prepareStatement(query);
 			
 			ResultSet rs = stm.executeQuery(); 
+			// rs contiene i record risultato della query
 			
 			while(rs.next()) {
 				if(rs.getString("nickname").equals(nickname) &

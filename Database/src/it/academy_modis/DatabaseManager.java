@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import it.academy_modis.model.Impiegato;
 import oracle.jdbc.pool.OracleDataSource;
 
 public class DatabaseManager {
@@ -58,15 +59,15 @@ public class DatabaseManager {
 	
 	}
 	
-	public void printLista(ArrayList<Impiegati> listaImpiegati) {
-		for(Impiegati i: listaImpiegati) {
+	public void printLista(ArrayList<Impiegato> listaImpiegati) {
+		for(Impiegato i: listaImpiegati) {
 			System.out.println(i.getNome() + " " + i.getCognome());
 		}
 	}
 	
-	public ArrayList<Impiegati> getImpiegatiBySalDesc() {
+	public ArrayList<Impiegato> getImpiegatiBySalDesc() {
 		
-		ArrayList<Impiegati> listaImpiegati = new ArrayList<Impiegati>();
+		ArrayList<Impiegato> listaImpiegati = new ArrayList<Impiegato>();
 		
 		String query = "select *\r\n" + 
 						"from SYS.impiegati i\r\n" + 
@@ -84,7 +85,7 @@ public class DatabaseManager {
 			
 			while(rs.next()) {
 				listaImpiegati.add(
-						new Impiegati(rs.getString("DS_NOME"), 
+						new Impiegato(rs.getString("DS_NOME"), 
 									rs.getString("DS_COGNOME"), 
 									rs.getInt("ID_IMPIEGATO_SUPERIORE")));
 			}
@@ -104,13 +105,13 @@ public class DatabaseManager {
 		
 	}
 	
-	public ArrayList<Impiegati> getAllImpiegatiDiplomati() {
+	public ArrayList<Impiegato> getAllImpiegatiDiplomati() {
 		
 		return getImpiegatiByTitolo("DIPLOMA%");
 		
 	}
 	
-	public ArrayList<Impiegati> getAllImpiegatiLaureati() {
+	public ArrayList<Impiegato> getAllImpiegatiLaureati() {
 		
 		return getImpiegatiByTitolo("LAUREA%");
 		
@@ -145,9 +146,9 @@ public class DatabaseManager {
 		
 	}
 
-	private ArrayList<Impiegati> getImpiegatiByTitolo(String titolo) {
+	private ArrayList<Impiegato> getImpiegatiByTitolo(String titolo) {
 		
-		ArrayList<Impiegati> listaImpiegati = new ArrayList<Impiegati>();
+		ArrayList<Impiegato> listaImpiegati = new ArrayList<Impiegato>();
 		
 		String query = "select *\r\n" + 
 						"from sys.impiegati i\r\n" + 
@@ -165,7 +166,7 @@ public class DatabaseManager {
 			
 			while(rs.next()) {
 				listaImpiegati.add(
-						new Impiegati(rs.getString("DS_NOME"), 
+						new Impiegato(rs.getString("DS_NOME"), 
 									rs.getString("DS_COGNOME"), 
 									rs.getInt("ID_IMPIEGATO_SUPERIORE")));
 			}
@@ -314,4 +315,3 @@ public class DatabaseManager {
 		}
 	}
 }
-	
