@@ -7,8 +7,8 @@
 <title>Welcome</title>
 </head>
 <body>
-	<p style="color: green">Ciao e benvenuto!</p>
+	<p style="color: green"><font size=+4>Ciao e benvenuto!</font></p>
 	<br/>
-	<p> <a href="getAllUsers">Lista utenti</a> </p>
+	<p> <a href="getAllUsers"><font size=+4>Lista utenti</a></font></p>
 </body>
 </html>
