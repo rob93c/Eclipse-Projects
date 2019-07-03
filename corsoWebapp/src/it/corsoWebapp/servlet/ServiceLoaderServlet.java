@@ -23,8 +23,6 @@ public class ServiceLoaderServlet extends HttpServlet {
 			dataSource.setPassword("password");
 			
 			this.connection = dataSource.getConnection();
-			
-		//	System.out.println("Connessione valida.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Connessione non funzionante.");

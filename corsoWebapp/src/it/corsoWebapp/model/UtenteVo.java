@@ -2,7 +2,7 @@ package it.corsoWebapp.model;
 
 public class UtenteVo {
 	
-	private int id_utente;
+	private int idUtente;
 	private String nickname;
 	private String nome;
 	private String cognome;
@@ -17,9 +17,9 @@ public class UtenteVo {
 		this.mail = mail;
 	}
 	
-	public UtenteVo(int id_utente, String nickname, String nome, String cognome, String mail, String password) {
+	public UtenteVo(int idUtente, String nickname, String nome, String cognome, String mail, String password) {
 		super();
-		this.id_utente = id_utente;
+		this.idUtente = idUtente;
 		this.nickname = nickname;
 		this.nome = nome;
 		this.cognome = cognome;
@@ -27,11 +27,11 @@ public class UtenteVo {
 		this.password = password;
 	}
 	
-	public int getId_utente() {
-		return id_utente;
+	public int getidUtente() {
+		return idUtente;
 	}
-	public void setId_utente(int id_utente) {
-		this.id_utente = id_utente;
+	public void setidUtente(int idUtente) {
+		this.idUtente = idUtente;
 	}
 	public String getNickname() {
 		return nickname;

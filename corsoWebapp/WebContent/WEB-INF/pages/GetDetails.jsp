@@ -6,12 +6,12 @@
 <head>
 <meta charset="ISO-8859-1">
 <%
-	UtenteVo u = (UtenteVo)request.getAttribute("idUtente");
+	UtenteVo u = (UtenteVo)request.getAttribute("utente");
 %>
 <title>Dettagli utente <%=u.getNickname()%></title>
 </head>
 <body>
-	<h1 style="color: purple"><b>Dettagli dell'utente:</b></h1>
+	<h1 style="color: orange"><b>Dettagli dell'utente:</b></h1>
 		<table>
 			<thead>
 				<tr>
@@ -25,7 +25,7 @@
 			</thead> 
 			<tbody>
 				<tr>
-					<td><%=u.getId_utente()%></td>
+					<td><%=u.getidUtente()%></td>
 					<td><%=u.getNickname()%></td>
 					<td><%=u.getNome()%></td>
 					<td><%=u.getCognome()%></td>

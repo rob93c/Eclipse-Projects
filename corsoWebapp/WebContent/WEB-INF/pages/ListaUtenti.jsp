@@ -30,7 +30,7 @@
 					for (UtenteVo u: listaUtenti) {
 				%>
 				<tr>
-					<td><a href="getUtenteByPK?idUtente=<%=u.getId_utente()%>"></a></td>
+					<td><a href="getUtenteByPK?idUtente=<%=u.getidUtente()%>"><%=u.getidUtente()%></a></td>
 					<td><%=u.getNome()%></td>
 					<td><%=u.getCognome()%></td>
 					<td><%=u.getMail()%></td>
