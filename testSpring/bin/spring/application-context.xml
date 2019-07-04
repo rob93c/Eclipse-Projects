@@ -23,4 +23,8 @@
 		<property name="dbm" ref="databaseManager"></property>
 	</bean>
 
+	<bean id="controller" class="it.testSpring.controller.Controller" scope="prototype">
+	<property name="udao" ref="dao"></property>
+	</bean>
+	
 </beans>
