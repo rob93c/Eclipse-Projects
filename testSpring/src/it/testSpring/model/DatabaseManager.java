@@ -27,8 +27,12 @@ public class DatabaseManager {
 		return this.connection;
 	}
 	
-	public Connection getConnection() {
-		return this.connection;
+	public void destroy() {
+		try {
+			this.connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
 

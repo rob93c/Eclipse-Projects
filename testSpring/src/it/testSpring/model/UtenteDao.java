@@ -61,13 +61,5 @@ public class UtenteDao {
 	public void setDbm(DatabaseManager database) {
 		this.dbm = database;
 	}
-	
-	public void destroy() {
-		try {
-			dbm.getConnection().close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 }
 
