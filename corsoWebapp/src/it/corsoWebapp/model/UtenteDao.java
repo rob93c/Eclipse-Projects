@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.corsoWebapp.servlet.ServiceLoaderServlet;
 import it.corsoWebapp.servlet.UtenteServlet;
 
 public class UtenteDao {
@@ -14,7 +13,7 @@ public class UtenteDao {
 	public List<UtenteVo> getAllUsers() {
 		
 		List<UtenteVo> listaUtenti = new ArrayList<UtenteVo>();
-		ServiceLoaderServlet sls = new ServiceLoaderServlet();
+		DatabaseManager sls = new DatabaseManager();
 		
 		String query = "select * "
 					+ "from sys.utente";
@@ -38,7 +37,7 @@ public class UtenteDao {
 	
 	public UtenteVo getUtenteByPK(int id) {
 		
-		ServiceLoaderServlet sls = new ServiceLoaderServlet();
+		DatabaseManager sls = new DatabaseManager();
 		
 		String query = "select * "
 					+ "from sys.utente "
