@@ -3,14 +3,26 @@ package it.testSpring.model;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+
 import oracle.jdbc.pool.OracleDataSource;
 
+@Service(value="databaseManager")
+@Scope(value="singleton")
 public class DatabaseManager {
-
+	
 	private Connection connection;
 	
-	public Connection startConnection() {
-		
+	public Connection getConnection() {
+		return this.connection;
+	}
+	
+	@PostConstruct
+	public void init() {
 		OracleDataSource dataSource;
 		try {
 			dataSource = new OracleDataSource();
@@ -24,9 +36,9 @@ public class DatabaseManager {
 			e.printStackTrace();
 			System.out.println("Connessione non funzionante.");
 		}
-		return this.connection;
 	}
 	
+	@PreDestroy
 	public void destroy() {
 		try {
 			this.connection.close();

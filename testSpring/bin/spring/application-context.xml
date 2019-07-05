@@ -16,15 +16,16 @@
 	   					   
 	default-init-method="init" default-destroy-method="destroy">
 	
-	<bean id="databaseManager" class="it.testSpring.model.DatabaseManager" scope="singleton">
-	</bean>
-
-	<bean id="dao" class="it.testSpring.model.UtenteDao" scope="prototype">
-		<property name="dbm" ref="databaseManager"></property>
-	</bean>
-
-	<bean id="controller" class="it.testSpring.controller.Controller" scope="prototype">
-	<property name="udao" ref="dao"></property>
-	</bean>
+	<context:component-scan base-package="it.testSpring.controller" />
+	<context:component-scan base-package="it.testSpring.model" />
+	
+	<aop:config proxy-target-class="true" />
+	<context:annotation-config />
+	
+	<bean id="utenteDao" class="it.testSpring.model.UtenteDao">	</bean>
+	
+	<bean id="controller" class="it.testSpring.controller.Controller"></bean>
+	
+	<bean id="databaseManager" class="it.testSpring.model.DatabaseManager"></bean>
 	
 </beans>

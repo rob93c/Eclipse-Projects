@@ -6,8 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository(value="utenteDao")
 public class UtenteDao {
 
+	@Autowired(required=true)
 	private DatabaseManager dbm;
 
 	public List<UtenteVo> getAllUsers() {
@@ -19,7 +24,7 @@ public class UtenteDao {
 		PreparedStatement stm;
 
 		try {
-			stm = dbm.startConnection().prepareStatement(query);
+			stm = dbm.getConnection().prepareStatement(query);
 			ResultSet rs = stm.executeQuery();
 
 			while (rs.next()) {
@@ -40,7 +45,7 @@ public class UtenteDao {
 		UtenteVo utente = null;
 		PreparedStatement stm;
 		try {
-			stm = dbm.startConnection().prepareStatement(query);
+			stm = dbm.getConnection().prepareStatement(query);
 			stm.setInt(1, id);
 
 			ResultSet rs = stm.executeQuery();
@@ -53,9 +58,5 @@ public class UtenteDao {
 			e.printStackTrace();
 		}
 		return utente;
-	}
-
-	public void setDbm(DatabaseManager database) {
-		this.dbm = database;
 	}
 }
